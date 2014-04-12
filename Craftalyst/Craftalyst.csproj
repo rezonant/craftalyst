@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{24F1FF93-91D4-4C2B-BCA2-1446AB492995}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Craftalyst</RootNamespace>
+    <AssemblyName>Craftalyst</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="ICSharpCode.SharpZipLib" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\libraries\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="StatusHandler.cs" />
+    <Compile Include="Downloader.cs" />
+    <Compile Include="FileUtility.cs" />
+    <Compile Include="Craftalyst.cs" />
+    <Compile Include="ZipUtility.cs" />
+    <Compile Include="Instance.cs" />
+    <Compile Include="Minecraft\Minecraft.cs" />
+    <Compile Include="Minecraft\MinecraftAccountType.cs" />
+    <Compile Include="Minecraft\MinecraftAuthentication.cs" />
+    <Compile Include="Minecraft\MinecraftSession.cs" />
+    <Compile Include="Minecraft\MinecraftAssetManifest.cs" />
+    <Compile Include="Minecraft\MinecraftVersionList.cs" />
+    <Compile Include="Minecraft\MinecraftVersionParameters.cs" />
+    <Compile Include="Minecraft\MinecraftVersionType.cs" />
+    <Compile Include="InstanceDescription.cs" />
+    <Compile Include="Mod.cs" />
+    <Compile Include="ModDescription.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="IStatusListener.cs" />
+    <Compile Include="ConsoleStatusListener.cs" />
+    <Compile Include="SyncSummary.cs" />
+    <Compile Include="ModUpgradeSummary.cs" />
+    <Compile Include="FailedDownloadException.cs" />
+    <Compile Include="Minecraft\IGameProcessMonitor.cs" />
+    <Compile Include="Minecraft\ConsoleGameProcessMonitor.cs" />
+    <Compile Include="Minecraft\GameMessage.cs" />
+    <Compile Include="Minecraft\GameMessageType.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Folder Include="Minecraft\" />
+  </ItemGroup>
+</Project>

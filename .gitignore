@@ -1,0 +1,6 @@
+*.exe
+*.res
+*.pdb
+*.mdb
+bin
+

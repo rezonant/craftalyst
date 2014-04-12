@@ -1,0 +1,24 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Craftalyst/Minecraft/Minecraft.cs">
+    <Files>
+      <File FileName="Craftalyst/Minecraft/MinecraftAccountType.cs" Line="13" Column="2" />
+      <File FileName="Craftalyst/Downloader.cs" Line="39" Column="22" />
+      <File FileName="Craftalyst/Craftalyst.cs" Line="152" Column="28" />
+      <File FileName="Craftalyst/Instance.cs" Line="106" Column="4" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/InstallationDialog.cs" Line="37" Column="3" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/LoginDialog.cs" Line="17" Column="1" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/MainWindow.cs" Line="120" Column="10" />
+      <File FileName="Craftalyst/Minecraft/Minecraft.cs" Line="130" Column="68" />
+      <File FileName="Craftalyst/Mod.cs" Line="31" Column="21" />
+      <File FileName="Craftalyst/InstanceDescription.cs" Line="62" Column="15" />
+      <File FileName="Craftalyst/SyncSummary.cs" Line="18" Column="45" />
+      <File FileName="Craftalyst/FailedDownloadException.cs" Line="15" Column="56" />
+      <File FileName="Craftalyst/Minecraft/IGameProcessMonitor.cs" Line="19" Column="3" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
