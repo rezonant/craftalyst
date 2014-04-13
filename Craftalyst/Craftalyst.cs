@@ -13,7 +13,7 @@ namespace Craftalyst {
 		/// <summary>
 		/// This is the Craftalyst version number.
 		/// </summary>
-		public const string Version = "0.0.1a6";
+		public const string Version = "0.1.0a9";
 
 		/// <summary>
 		/// The name of the application, without any spaces or special characters.

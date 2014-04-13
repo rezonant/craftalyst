@@ -42,7 +42,11 @@ namespace Craftalyst
 			Save = "";
 			OnlineMode = true;
 			AutoSelect = true;
+
 			JavaFile = "java";
+			if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+				JavaFile = "javaw";
+
 			StartRam = "256";
 			MaxRam = "2048";
 		}
@@ -187,18 +191,18 @@ namespace Craftalyst
         /// <param name="username">Input a username here. Example: "username"</param>
         /// <param name="password">Input a password here. Example: "pass1234"</param>
         /// <returns></returns>
-        public void Start (string username = "", string password = "")
+        public Process Start (string username = "", string password = "")
 		{
 			Username = username;
 			var session = Authenticate (username, password);
 			if (session == null)
 				throw new Exception("Failed to authenticate");
-			Start (session);
+			return Start (session);
         }
 		
-        public void Start (MinecraftSession authSession)
+        public Process Start (MinecraftSession authSession)
 		{
-			Start(authSession, new ConsoleGameProcessMonitor());
+			return Start(authSession, new ConsoleGameProcessMonitor());
 		}
 
 		private ThreadStart GenerateGameMessagePumper(StreamReader input, GameMessageType type, Queue<GameMessage> queue, EventWaitHandle handle)
@@ -239,7 +243,7 @@ namespace Craftalyst
 		/// enough to learn the basics of the C# lock() statement and also System.Collections.Generic.Queue<T>. 
 		/// </param>
         /// <returns></returns>
-        public void Start (MinecraftSession authSession, IGameProcessMonitor monitor)
+        public Process Start (MinecraftSession authSession, IGameProcessMonitor monitor)
 		{
 			Username = authSession.OriginalUsername;
             Setup();
@@ -249,7 +253,7 @@ namespace Craftalyst
 			// a queue, which we pick up with a third "mediator" thread, which handles calling the IGameMonitor passed 
 			// by the caller.
 
-            var proc = RunCommand(authSession);
+            var proc = RunCommand(authSession, monitor);
 			Queue<GameMessage> messages = new Queue<GameMessage>();
 
 			var waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
@@ -258,9 +262,9 @@ namespace Craftalyst
 
 			var monitorThread = new Thread(delegate (object state) {
 				while (true) {
-					waitHandle.WaitOne();
+					waitHandle.WaitOne(new TimeSpan(0, 0, 0, 0, 100));
 
-					if (proc.HasExited && stdErrThread.IsAlive && stdOutThread.IsAlive) {
+					if (proc.HasExited && !stdErrThread.IsAlive && !stdOutThread.IsAlive) {
 						Console.WriteLine("Minecraft appears to have exited ({0}) and all thread activity is completed.", proc.ExitCode);
 						break;
 					}
@@ -290,13 +294,18 @@ namespace Craftalyst
 
 			Console.WriteLine("Starting monitor threads...");
 			stdErrThread.Name = "Minecraft-StdErr";
+			stdErrThread.IsBackground = true;
 			stdErrThread.Start();
 			stdOutThread.Name = "Minecraft-StdOut";
+			stdOutThread.IsBackground = true;
 			stdOutThread.Start();
 			monitorThread.Name = "Minecraft-Monitor";
+			monitorThread.IsBackground = true;
 			monitorThread.Start();
 
 			Console.WriteLine("Game has started, returning control to UI...");
+
+			return proc;
         }
 
         /// <summary>
@@ -528,16 +537,27 @@ namespace Craftalyst
 				File.Copy (jarStore, jarFile);
 		}
 
+		public bool IsSetup { get; private set; }
+		
+        public void Setup ()
+		{
+			Setup(new ConsoleStatusListener());
+		}
+
         /// <summary>
         /// Look for & Download required Files
         /// </summary>
         /// <returns>Status of exceptions or success</returns>
-        public void Setup ()
+        public void Setup (IStatusListener listener)
 		{
-			Logger.Debug ("Retrieving version information from Minecraft.net...");
+			if (IsSetup)
+				return;
+
+			listener.Log ("Retrieving version information from Minecraft.net...");
 			VersionParameters = this.GetVersionParameters(SelectedVersion);
-			Logger.Debug ("Verifying assets...");
-			InstallAssets();
+			listener.Log ("Verifying assets...");
+			InstallAssets(listener);
+			IsSetup = true;
         }
 
 		public void Install(IStatusListener listener)
@@ -648,33 +668,46 @@ namespace Craftalyst
         /// Run the command, which should open Minecraft. Assuming everything else is filled in as intended.
         /// </summary>
         /// <returns>Status of exceptions or success</returns>
-        private Process RunCommand(MinecraftSession session)
+        private Process RunCommand(MinecraftSession session, IGameProcessMonitor monitor)
         {
 			string args = FormatArguments(session);
+			string javaFile = FileUtility.FindOnPath(JavaFile);
+
+			if (javaFile == null)
+				javaFile = JavaFile;
 
 			Logger.Debug("Starting minecraft:");
-			Logger.Debug ("{0} {1}", JavaFile, args);
+			Logger.Debug ("{0} {1}", javaFile, args);
+
+			monitor.OutputLine(GameMessageType.Output, "Starting minecraft:");
+			monitor.OutputLine(GameMessageType.Output, string.Format("{0} {1}", javaFile, args));
 
             Process mcProc = new Process();
             mcProc.StartInfo.UseShellExecute = false; 
             mcProc.StartInfo.WorkingDirectory = GameLocation;
-            mcProc.StartInfo.FileName = JavaFile;
+            mcProc.StartInfo.FileName = javaFile;
             mcProc.StartInfo.Arguments = args;
 			mcProc.StartInfo.RedirectStandardOutput = true;
 			mcProc.StartInfo.RedirectStandardError = true;
-            mcProc.Start();
 
-            if (CPUPriority == "Realtime") {
-                mcProc.PriorityClass = ProcessPriorityClass.RealTime;
-            } else if (CPUPriority == "High") {
-                mcProc.PriorityClass = ProcessPriorityClass.High;
-            } else if (CPUPriority == "Above Normal") {
-                mcProc.PriorityClass = ProcessPriorityClass.AboveNormal;
-            } else if (CPUPriority == "Below Normal") {
-                mcProc.PriorityClass = ProcessPriorityClass.BelowNormal;
-            }
+			try {
+	            mcProc.Start();
 
-			return mcProc;
+	            if (CPUPriority == "Realtime") {
+	                mcProc.PriorityClass = ProcessPriorityClass.RealTime;
+	            } else if (CPUPriority == "High") {
+	                mcProc.PriorityClass = ProcessPriorityClass.High;
+	            } else if (CPUPriority == "Above Normal") {
+	                mcProc.PriorityClass = ProcessPriorityClass.AboveNormal;
+	            } else if (CPUPriority == "Below Normal") {
+	                mcProc.PriorityClass = ProcessPriorityClass.BelowNormal;
+	            }
+
+				return mcProc;
+			} catch (Exception e) {
+				Logger.Debug(e);
+				throw e;
+			}
         }
     }
 }

@@ -26,7 +26,7 @@ namespace CraftalystLauncher
 		{
 			DedicatedLauncher.Singleton.EnqueueUxJob(delegate () {
 				Console.WriteLine("Game Ended!");
-				Window.GameEnded();
+				Window.GameEnded(exitCode);
 			});
 		}
 

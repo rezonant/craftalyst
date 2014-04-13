@@ -37,7 +37,9 @@ namespace CraftalystLauncher
 
 		public void Log (string message, params object[] args)
 		{
-			log.Buffer.Text = log.Buffer.Text + string.Format (message, args) + "\n";
+			//log.Buffer.Text = log.Buffer.Text + string.Format (message, args) + "\n";
+			var iter = log.Buffer.EndIter;
+			log.Buffer.Insert(ref iter, string.Format(message+"\n", args));
 			log.ScrollToIter(log.Buffer.EndIter, 0, false, 0, 0);
 		}
 

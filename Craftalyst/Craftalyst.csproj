@@ -27,6 +27,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -35,9 +36,11 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Numerics" />
-    <Reference Include="ICSharpCode.SharpZipLib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\libraries\JsonNet\Bin\Net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\libraries\JsonNet\Bin\Net35\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\libraries\SharpZipLib\net-20\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +72,8 @@
     <Compile Include="Minecraft\ConsoleGameProcessMonitor.cs" />
     <Compile Include="Minecraft\GameMessage.cs" />
     <Compile Include="Minecraft\GameMessageType.cs" />
+    <Compile Include="SavedCredentials.cs" />
+    <Compile Include="SavedCredential.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

@@ -1,20 +1,28 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Craftalyst/Minecraft/Minecraft.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../../Creative/Code/Craftalyst/GtkHelloWorld/MainWindow.cs">
     <Files>
       <File FileName="Craftalyst/Minecraft/MinecraftAccountType.cs" Line="13" Column="2" />
       <File FileName="Craftalyst/Downloader.cs" Line="39" Column="22" />
-      <File FileName="Craftalyst/Craftalyst.cs" Line="152" Column="28" />
-      <File FileName="Craftalyst/Instance.cs" Line="106" Column="4" />
-      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/InstallationDialog.cs" Line="37" Column="3" />
-      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/LoginDialog.cs" Line="17" Column="1" />
-      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/MainWindow.cs" Line="120" Column="10" />
-      <File FileName="Craftalyst/Minecraft/Minecraft.cs" Line="130" Column="68" />
+      <File FileName="Craftalyst/Craftalyst.cs" Line="18" Column="16" />
+      <File FileName="Craftalyst/Instance.cs" Line="225" Column="4" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/InstallationDialog.cs" Line="46" Column="27" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/LoginDialog.cs" Line="25" Column="68" />
       <File FileName="Craftalyst/Mod.cs" Line="31" Column="21" />
-      <File FileName="Craftalyst/InstanceDescription.cs" Line="62" Column="15" />
+      <File FileName="Craftalyst/InstanceDescription.cs" Line="56" Column="14" />
       <File FileName="Craftalyst/SyncSummary.cs" Line="18" Column="45" />
       <File FileName="Craftalyst/FailedDownloadException.cs" Line="15" Column="56" />
-      <File FileName="Craftalyst/Minecraft/IGameProcessMonitor.cs" Line="19" Column="3" />
+      <File FileName="Craftalyst/Minecraft/IGameProcessMonitor.cs" Line="25" Column="1" />
+      <File FileName="Craftalyst/Minecraft/ConsoleGameProcessMonitor.cs" Line="16" Column="16" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/InstallationDialogStatusListener.cs" Line="22" Column="13" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/DedicatedLauncher.cs" Line="11" Column="3" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/MainWindow.cs" Line="153" Column="42" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/MainWindowGameMonitor.cs" Line="19" Column="4" />
+      <File FileName="CraftalystTestLauncher/Main.cs" Line="30" Column="18" />
+      <File FileName="Craftalyst/Minecraft/Minecraft.cs" Line="295" Column="25" />
+      <File FileName="../../Creative/Code/Craftalyst/GtkHelloWorld/Main.cs" Line="8" Column="42" />
+      <File FileName="../../Creative/Code/Craftalyst/GtkHelloWorld/gtk-gui/MainWindow.cs" Line="9" Column="23" />
+      <File FileName="../../Creative/Code/Craftalyst/GtkHelloWorld/MainWindow.cs" Line="17" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

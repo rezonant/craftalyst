@@ -16,6 +16,8 @@ namespace CraftalystLauncher
 		private global::Gtk.Label label6;
 		private global::Gtk.Entry password;
 		private global::Gtk.Entry username;
+		private global::Gtk.HBox hbox1;
+		private global::Gtk.CheckButton rememberCreds;
 		private global::Gtk.Button buttonCancel;
 		private global::Gtk.Button buttonOk;
 		
@@ -24,7 +26,10 @@ namespace CraftalystLauncher
 			global::Stetic.Gui.Initialize (this);
 			// Widget CraftalystLauncher.LoginDialog
 			this.Name = "CraftalystLauncher.LoginDialog";
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.Title = global::Mono.Unix.Catalog.GetString ("Craftalyst - Minecraft Login");
+			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
+			this.WindowPosition = ((global::Gtk.WindowPosition)(1));
+			this.AllowGrow = false;
 			// Internal child CraftalystLauncher.LoginDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;
 			w1.Name = "dialog1_VBox";
@@ -154,42 +159,90 @@ namespace CraftalystLauncher
 			w13.Position = 0;
 			w13.Expand = false;
 			w13.Fill = false;
+			// Container child dialog1_VBox.Gtk.Box+BoxChild
+			this.hbox1 = new global::Gtk.HBox ();
+			this.hbox1.Name = "hbox1";
+			this.hbox1.Spacing = 6;
+			// Container child hbox1.Gtk.Box+BoxChild
+			this.rememberCreds = new global::Gtk.CheckButton ();
+			this.rememberCreds.CanFocus = true;
+			this.rememberCreds.Name = "rememberCreds";
+			this.rememberCreds.Label = global::Mono.Unix.Catalog.GetString ("Remember login credentials");
+			this.rememberCreds.DrawIndicator = true;
+			this.rememberCreds.UseUnderline = true;
+			this.hbox1.Add (this.rememberCreds);
+			global::Gtk.Box.BoxChild w14 = ((global::Gtk.Box.BoxChild)(this.hbox1 [this.rememberCreds]));
+			w14.Position = 1;
+			w14.Expand = false;
+			w1.Add (this.hbox1);
+			global::Gtk.Box.BoxChild w15 = ((global::Gtk.Box.BoxChild)(w1 [this.hbox1]));
+			w15.Position = 1;
+			w15.Expand = false;
+			w15.Fill = false;
 			// Internal child CraftalystLauncher.LoginDialog.ActionArea
-			global::Gtk.HButtonBox w14 = this.ActionArea;
-			w14.Name = "dialog1_ActionArea";
-			w14.Spacing = 10;
-			w14.BorderWidth = ((uint)(5));
-			w14.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
+			global::Gtk.HButtonBox w16 = this.ActionArea;
+			w16.Name = "dialog1_ActionArea";
+			w16.Spacing = 10;
+			w16.BorderWidth = ((uint)(5));
+			w16.LayoutStyle = ((global::Gtk.ButtonBoxStyle)(4));
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonCancel = new global::Gtk.Button ();
 			this.buttonCancel.CanDefault = true;
 			this.buttonCancel.CanFocus = true;
 			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.UseStock = true;
 			this.buttonCancel.UseUnderline = true;
-			this.buttonCancel.Label = "gtk-cancel";
+			// Container child buttonCancel.Gtk.Container+ContainerChild
+			global::Gtk.Alignment w17 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+			// Container child GtkAlignment.Gtk.Container+ContainerChild
+			global::Gtk.HBox w18 = new global::Gtk.HBox ();
+			w18.Spacing = 2;
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Image w19 = new global::Gtk.Image ();
+			w19.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-cancel", global::Gtk.IconSize.Menu);
+			w18.Add (w19);
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Label w21 = new global::Gtk.Label ();
+			w21.LabelProp = global::Mono.Unix.Catalog.GetString ("_Cancel");
+			w21.UseUnderline = true;
+			w18.Add (w21);
+			w17.Add (w18);
+			this.buttonCancel.Add (w17);
 			this.AddActionWidget (this.buttonCancel, -6);
-			global::Gtk.ButtonBox.ButtonBoxChild w15 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w14 [this.buttonCancel]));
-			w15.Expand = false;
-			w15.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w25 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16 [this.buttonCancel]));
+			w25.Expand = false;
+			w25.Fill = false;
 			// Container child dialog1_ActionArea.Gtk.ButtonBox+ButtonBoxChild
 			this.buttonOk = new global::Gtk.Button ();
 			this.buttonOk.CanDefault = true;
 			this.buttonOk.CanFocus = true;
 			this.buttonOk.Name = "buttonOk";
-			this.buttonOk.UseStock = true;
 			this.buttonOk.UseUnderline = true;
-			this.buttonOk.Label = "gtk-ok";
+			// Container child buttonOk.Gtk.Container+ContainerChild
+			global::Gtk.Alignment w26 = new global::Gtk.Alignment (0.5F, 0.5F, 0F, 0F);
+			// Container child GtkAlignment.Gtk.Container+ContainerChild
+			global::Gtk.HBox w27 = new global::Gtk.HBox ();
+			w27.Spacing = 2;
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Image w28 = new global::Gtk.Image ();
+			w28.Pixbuf = global::Stetic.IconLoader.LoadIcon (this, "gtk-apply", global::Gtk.IconSize.Menu);
+			w27.Add (w28);
+			// Container child GtkHBox.Gtk.Container+ContainerChild
+			global::Gtk.Label w30 = new global::Gtk.Label ();
+			w30.LabelProp = global::Mono.Unix.Catalog.GetString ("_OK");
+			w30.UseUnderline = true;
+			w27.Add (w30);
+			w26.Add (w27);
+			this.buttonOk.Add (w26);
 			this.AddActionWidget (this.buttonOk, -5);
-			global::Gtk.ButtonBox.ButtonBoxChild w16 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w14 [this.buttonOk]));
-			w16.Position = 1;
-			w16.Expand = false;
-			w16.Fill = false;
+			global::Gtk.ButtonBox.ButtonBoxChild w34 = ((global::Gtk.ButtonBox.ButtonBoxChild)(w16 [this.buttonOk]));
+			w34.Position = 1;
+			w34.Expand = false;
+			w34.Fill = false;
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 551;
-			this.DefaultHeight = 209;
+			this.DefaultWidth = 481;
+			this.DefaultHeight = 227;
 			this.Show ();
 			this.username.Activated += new global::System.EventHandler (this.OnUsernameActivated);
 			this.password.Activated += new global::System.EventHandler (this.OnPasswordActivated);

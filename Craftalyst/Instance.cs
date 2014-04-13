@@ -49,8 +49,13 @@ namespace Craftalyst
 
 		public InstanceDescription Description { get; set; }
 
+		private Minecraft GameObject { get; set; }
+
 		public Minecraft CreateMinecraft ()
 		{
+			if (GameObject != null)
+				return GameObject;
+
 			var mc = new Minecraft(GameFolder, AssetsFolder, LibraryFolder, VersionsFolder);
 			mc.SelectedVersion = MinecraftVersion;
 			mc.UnofficialVersionsUrl = string.Format("{0}/versions", this.Description.SyncUrl);
@@ -58,7 +63,7 @@ namespace Craftalyst
 				mc.StartRam = this.Description.StartRam;
 			if (Description.MaxRam != null)
 				mc.MaxRam = this.Description.MaxRam;
-			return mc;
+			return GameObject = mc;
 		}
 
 		public void SaveDescription ()

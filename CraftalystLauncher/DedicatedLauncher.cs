@@ -4,6 +4,8 @@ using Craftalyst;
 using System.Collections.Generic;
 using System.Threading;
 using System.Timers;
+using System.IO;
+using System.Linq;
 
 namespace CraftalystLauncher
 {
@@ -13,7 +15,7 @@ namespace CraftalystLauncher
 		{
 			Craft = new Context ();
 			Craft.AppName = "Craftalyst Launcher";
-			Craft.AppVersion = "0.0.1a1";
+			Craft.AppVersion = "0.1.0a9";
 			
 			var instance = Craft.GetInstance (instanceName);
 
@@ -42,6 +44,23 @@ namespace CraftalystLauncher
 		{
 			
 			LoginDialog login = new LoginDialog ();
+			SavedCredentials saved = null;
+			string credsFileName = Path.Combine(Instance.GameFolder, "credentials.json");
+
+			if (File.Exists(credsFileName)) {
+				using (var sr = new StreamReader(credsFileName))
+					saved = SavedCredentials.Parse(sr.ReadToEnd());
+			}
+
+			if (saved != null) {
+				login.Username = saved.AutoLoginUser;
+
+				var savedCreds = saved.Credentials.Where(x => x.UserName == saved.AutoLoginUser).FirstOrDefault();
+				if (savedCreds != null) {
+					login.Password = savedCreds.Password;
+					login.RememberCredentials = true;
+				}
+			}
 
 			while (true) {
 				int response = login.Run ();
@@ -69,6 +88,23 @@ namespace CraftalystLauncher
 					Environment.Exit(0);
 				}
 			}
+
+			saved = new SavedCredentials() {
+				AutoLoginUser = login.Username,
+				Credentials = new List<SavedCredential>()
+			};
+
+			if (login.RememberCredentials) {
+				saved.Credentials = new List<SavedCredential>() {
+					new SavedCredential() {
+						UserName = login.Username,
+						Password = login.Password
+					}
+				};
+			}
+
+			using (StreamWriter sw = new StreamWriter(credsFileName))
+				sw.Write(saved.ToJson());
 
 			login.Hide ();
 			login.Destroy();

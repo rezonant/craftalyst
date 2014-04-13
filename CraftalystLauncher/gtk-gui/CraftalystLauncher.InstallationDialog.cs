@@ -17,7 +17,9 @@ namespace CraftalystLauncher
 			global::Stetic.Gui.Initialize (this);
 			// Widget CraftalystLauncher.InstallationDialog
 			this.Name = "CraftalystLauncher.InstallationDialog";
-			this.WindowPosition = ((global::Gtk.WindowPosition)(4));
+			this.Title = global::Mono.Unix.Catalog.GetString ("Craftalyst - Installing Minecraft");
+			this.TypeHint = ((global::Gdk.WindowTypeHint)(1));
+			this.WindowPosition = ((global::Gtk.WindowPosition)(1));
 			// Internal child CraftalystLauncher.InstallationDialog.VBox
 			global::Gtk.VBox w1 = this.VBox;
 			w1.Name = "dialog1_VBox";
@@ -45,6 +47,7 @@ namespace CraftalystLauncher
 			this.log.Name = "log";
 			this.log.Editable = false;
 			this.log.CursorVisible = false;
+			this.log.WrapMode = ((global::Gtk.WrapMode)(2));
 			this.GtkScrolledWindow.Add (this.log);
 			this.vbox2.Add (this.GtkScrolledWindow);
 			global::Gtk.Box.BoxChild w4 = ((global::Gtk.Box.BoxChild)(this.vbox2 [this.GtkScrolledWindow]));
@@ -90,8 +93,8 @@ namespace CraftalystLauncher
 			if ((this.Child != null)) {
 				this.Child.ShowAll ();
 			}
-			this.DefaultWidth = 810;
-			this.DefaultHeight = 437;
+			this.DefaultWidth = 507;
+			this.DefaultHeight = 474;
 			this.Show ();
 			this.buttonCancel.Activated += new global::System.EventHandler (this.OnButtonCancelActivated);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelActivated);

@@ -35,20 +35,31 @@ public partial class MainWindow: Gtk.Window
 		if (syncSummary.NewConfiguration)
 			items.Add("New configuration to download.");
 
-		if (items.Count > 0)
-			UpdateSummary = string.Join("\n", items.Select (x => " * "+x));
-		else
-			UpdateSummary = "None, ready to play!";
-
 		InstanceName = instance.Description.Name;
 		Description = instance.Description.Description;
 
 		var newDesc = Instance.FetchServerInstanceDescription();
 		serverNews.Buffer.Text = newDesc.MessageOfTheDay;
+		
+		//playButton.ImagePosition = PositionType.Left;
+
+		if (items.Count > 0) {
+			UpdateSummary = string.Join("\n", items.Select (x => " * "+x));
+			playButton.Image = Image.NewFromIconName(Stock.GoUp, IconSize.Button);
+			playButton.Label = "Update to Play!";
+		} else {
+			UpdateSummary = "None, ready to play!";
+			playButton.Hide();
+			playButton.Unrealize();
+			playButton.Label = "Play!";
+			playButton.Image = Image.NewFromIconName(Stock.Apply, IconSize.Button);
+			playButton.Show();
+		}
 	}
-	
+
 	public MinecraftSession Session { get; set; }
 	public Instance Instance { get; set; }
+	public Process GameProcess { get; set; }
 
 	string description = "This is a Craftalyst instance.";
 	string name = "Craftalyst";
@@ -84,6 +95,25 @@ public partial class MainWindow: Gtk.Window
 		}
 	}
 
+	bool gameIsActive = false;
+
+	public bool GameIsActive {
+		get {
+			return gameIsActive;
+		} set {
+			if (value == gameIsActive)
+				return;
+
+			if (value) {
+				playButton.Label = "Kill Minecraft";
+			} else {
+				playButton.Label = "Play";
+			}
+
+			gameIsActive = value;
+		}
+	}
+
 	private void UpdateOverview ()
 	{
 		overviewAndStatus.Buffer.Text = string.Format (
@@ -104,44 +134,101 @@ public partial class MainWindow: Gtk.Window
 		//var iter = minecraftLog.Buffer.EndIter;
 		//minecraftLog.Buffer.Insert(ref iter, str);
 		
-		minecraftLog.Buffer.Text += str + "\n";
+		//minecraftLog.Buffer.Text += str + "\n";
+		var iter = minecraftLog.Buffer.EndIter;
+		minecraftLog.Buffer.Insert(ref iter, string.Format("{0}\n", str));
+
 		minecraftLog.ScrollToIter(minecraftLog.Buffer.EndIter, 0, false, 0, 0);
 	}
 
-	public void GameEnded ()
+	public void GameEnded (int exitCode)
 	{
-		// TODO
+		this.Log("");
+		this.Log(string.Format("Minecraft has exited ({0})", exitCode));
+
+		this.GameIsActive = false;
+		this.minecraftStatus.Text = string.Format("Minecraft has stopped ({0})", exitCode);
+	}
+	
+	protected void OnShown (object sender, EventArgs a)
+	{
 	}
 
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
-		Application.Quit ();
 		a.RetVal = true;
+		Application.Quit ();
 	}
 
 	protected void OnPlayButtonActivated (object sender, EventArgs e)
 	{
+		if (GameIsActive)
+			KillMinecraft();
+		else
+			Play();
+	}	
+
+	void KillMinecraft ()
+	{
+		GameProcess.Kill();
+	}
+
+	public void Play()
+	{
+		playButton.Sensitive = false;
+		var monitor = new MainWindowGameMonitor(this);
+
 		var installDialog = new InstallationDialog();
-		installDialog.ShowAll();
-		Instance.Sync(new InstallationDialogStatusListener(installDialog));
+		installDialog.Parent = this;
+		installDialog.Show();
+		installDialog.GdkWindow.Raise();
+
+		// Run syncing in installation dialog as a separate thread,
+		// and wait until it is done while processing UI events for it
+
+		var thread = new Thread(delegate() {
+			var listener = new InstallationDialogStatusListener(installDialog);
+			Instance.Sync(listener);
+			var mc = Instance.CreateMinecraft();
+			mc.Setup(listener);
+		});
+		thread.IsBackground = true;
+		thread.Name = "GameSync";
+		thread.Start();
+		GLib.Timeout.Add(100, delegate() {
+			if (!thread.IsAlive) {
+				Application.Quit();
+				return false;
+			}
+
+			return true;
+		});
+		Gtk.Application.Run();
+
+		// Run the game
 
 		installDialog.Log ("");
 		installDialog.Log ("Getting ready to start Minecraft!");
 		installDialog.Status = "All updates completed!";
 		installDialog.Title = "All updates completed!";
 		installDialog.Destroy ();
+		
+		monitor.OutputLine(GameMessageType.Output, "");
+		monitor.OutputLine(GameMessageType.Output, "Starting Minecraft...");
 
-		var thread = new Thread(delegate() {
+		playButton.Sensitive = true;
+		GameIsActive = true;
+		thread = new Thread(delegate() {
 			var mc = Instance.CreateMinecraft();
-			mc.Start(Session, new MainWindowGameMonitor(this));
+			GameProcess = mc.Start(Session, monitor);
 			Console.WriteLine("Game launched from seperate thread!");
 		});
-
+		thread.IsBackground = true;
+		thread.Name = "GameLauncher";
 		thread.Start();
 
 		Console.WriteLine("Control returned.");
-
-	}	
+	}
 
 	protected void OnTsButtonActivated (object sender, EventArgs e)
 	{

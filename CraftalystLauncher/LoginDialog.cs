@@ -13,12 +13,24 @@ namespace CraftalystLauncher
 		public string Username {
 			get {
 				return this.username.Text;
+			} set {
+				this.username.Text = value;
 			}
 		}
 
 		public string Password {
 			get {
 				return this.password.Text;
+			} set {
+				this.password.Text = value;
+			}
+		}
+
+		public bool RememberCredentials {
+			get {
+				return rememberCreds.Active;
+			} set {
+				rememberCreds.Active = value;
 			}
 		}
 
