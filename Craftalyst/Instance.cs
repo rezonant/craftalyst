@@ -218,6 +218,8 @@ namespace Craftalyst
 			listener.SetStatus("Writing updated instance description...");
 			using (var sw = new StreamWriter(Path.Combine (GameFolder, "craftalyst-instance.json")))
 				sw.Write(Description.ToJson());
+			
+			SaveDescription();
 
 			listener.SetProgress(1);
 		}

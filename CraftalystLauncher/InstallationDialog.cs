@@ -40,6 +40,12 @@ namespace CraftalystLauncher
 			log.Buffer.Text = log.Buffer.Text + string.Format (message, args) + "\n";
 			log.ScrollToIter(log.Buffer.EndIter, 0, false, 0, 0);
 		}
+
+		protected void OnButtonCancelActivated (object sender, EventArgs e)
+		{
+			Gtk.Application.Quit();
+		}
+
 	}
 }
 

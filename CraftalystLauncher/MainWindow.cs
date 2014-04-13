@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CraftalystLauncher;
 using System.Threading;
+using System.Diagnostics;
 
 public partial class MainWindow: Gtk.Window
 {	
@@ -15,7 +16,7 @@ public partial class MainWindow: Gtk.Window
 		Build ();
 
 		titleLabel.Text = instance.Name;
-		usernameLabel.Text = string.Format ("Playing as <b>{0}</b>", session.Username);
+		usernameLabel.Markup = string.Format ("Playing as <b>{0}</b>", session.Username);
 
 		var syncSummary = instance.CheckSync();
 
@@ -41,6 +42,9 @@ public partial class MainWindow: Gtk.Window
 
 		InstanceName = instance.Description.Name;
 		Description = instance.Description.Description;
+
+		var newDesc = Instance.FetchServerInstanceDescription();
+		serverNews.Buffer.Text = newDesc.MessageOfTheDay;
 	}
 	
 	public MinecraftSession Session { get; set; }
@@ -95,6 +99,20 @@ public partial class MainWindow: Gtk.Window
 		);
 	}
 
+	public void Log (string str)
+	{
+		//var iter = minecraftLog.Buffer.EndIter;
+		//minecraftLog.Buffer.Insert(ref iter, str);
+		
+		minecraftLog.Buffer.Text += str + "\n";
+		minecraftLog.ScrollToIter(minecraftLog.Buffer.EndIter, 0, false, 0, 0);
+	}
+
+	public void GameEnded ()
+	{
+		// TODO
+	}
+
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
 		Application.Quit ();
@@ -111,13 +129,60 @@ public partial class MainWindow: Gtk.Window
 		installDialog.Log ("Getting ready to start Minecraft!");
 		installDialog.Status = "All updates completed!";
 		installDialog.Title = "All updates completed!";
-
-		Thread.Sleep(1000);
-
 		installDialog.Destroy ();
 
-		var mc = Instance.CreateMinecraft();
-		mc.Start(Session);
+		var thread = new Thread(delegate() {
+			var mc = Instance.CreateMinecraft();
+			mc.Start(Session, new MainWindowGameMonitor(this));
+			Console.WriteLine("Game launched from seperate thread!");
+		});
+
+		thread.Start();
+
+		Console.WriteLine("Control returned.");
+
+	}	
+
+	protected void OnTsButtonActivated (object sender, EventArgs e)
+	{
+		DedicatedLauncher.MessageBox("WTF");
+	}	
+
+	protected void OnMapButtonActivated (object sender, EventArgs e)
+	{
+		Process.Start("http://tirrin.com/map");
+	}	
+
+	protected void OnWikiButtonActivated (object sender, EventArgs e)
+	{
+		Process.Start("http://tirrin.com/wiki");
+	}	
+
+	protected void OnForumsButtonActivated (object sender, EventArgs e)
+	{
+		Process.Start("http://tirrin.com/forums");
+	}	
+
+	protected void OnWebsiteButtonActivated (object sender, EventArgs e)
+	{
+		Process.Start("http://tirrin.com/");
+	}	
+
+	protected void OnDonateButtonActivated (object sender, EventArgs e)
+	{
+		Process.Start("http://tirrin.com/donate");
+	}	
+
+	protected void OnReportServerDownButtonActivated (object sender, EventArgs e)
+	{
+		Process.Start("http://tirrin.com/reportServerDown");
 	}
+
+
+
+
+
+
+
 
 }

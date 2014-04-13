@@ -17,7 +17,7 @@ namespace Craftalyst
 	/// </summary>
 	public interface IGameProcessMonitor
 	{
-		void OutputLine(string line);
+		void OutputLine(GameMessageType type, string line);
 		void GameEnded(int exitCode);
 	}
 

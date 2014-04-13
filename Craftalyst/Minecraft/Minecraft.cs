@@ -201,18 +201,18 @@ namespace Craftalyst
 			Start(authSession, new ConsoleGameProcessMonitor());
 		}
 
-		private ThreadStart GenerateGameMessagePumper(Stream input, GameMessageType type, Queue<GameMessage> queue)
+		private ThreadStart GenerateGameMessagePumper(StreamReader input, GameMessageType type, Queue<GameMessage> queue, EventWaitHandle handle)
 		{
-			return delegate(object state) {
-				using (StreamReader sr = new StreamReader(input)) {
-					string line = null;
-					while ((line = sr.ReadLine()) != null) {
-						lock (queue)
-							queue.Enqueue(new GameMessage() {
-								Type = type,
-								Line = line
-							});
+			return delegate() {
+				string line = null;
+				while ((line = input.ReadLine()) != null) {
+					lock (queue) {
+						queue.Enqueue(new GameMessage() {
+							Type = type,
+							Line = line
+						});
 					}
+					handle.Set();
 				}
 			};
 		}
@@ -251,11 +251,15 @@ namespace Craftalyst
 
             var proc = RunCommand(authSession);
 			Queue<GameMessage> messages = new Queue<GameMessage>();
-			var stdErrThread = new Thread(GenerateGameMessagePumper(proc.StandardError, GameMessageType.Error, messages));
-			var stdOutThread = new Thread(GenerateGameMessagePumper(proc.StandardOutput, GameMessageType.Output, messages));
+
+			var waitHandle = new EventWaitHandle(false, EventResetMode.AutoReset);
+			var stdErrThread = new Thread(GenerateGameMessagePumper(proc.StandardError, GameMessageType.Error, messages, waitHandle));
+			var stdOutThread = new Thread(GenerateGameMessagePumper(proc.StandardOutput, GameMessageType.Output, messages, waitHandle));
 
 			var monitorThread = new Thread(delegate (object state) {
 				while (true) {
+					waitHandle.WaitOne();
+
 					if (proc.HasExited && stdErrThread.IsAlive && stdOutThread.IsAlive) {
 						Console.WriteLine("Minecraft appears to have exited ({0}) and all thread activity is completed.", proc.ExitCode);
 						break;
@@ -269,12 +273,15 @@ namespace Craftalyst
 						// Note that this occurs in OUR thread. You, as the receiver of this
 						// event, need to make sure you perform operations therein in the proper
 						// thread. Learn to use Queues and always lock em.
-						
-						var msg = messages.Dequeue();
-						monitor.OutputLine(msg.Type, msg.Line);
-					}
 
-					Thread.Sleep(0);
+						int max = Math.Min(100, messages.Count);
+
+						for (int i = 0; i < max; ++i) {
+							var msg = messages.Dequeue();
+							Console.WriteLine(msg.Line);
+							monitor.OutputLine(msg.Type, msg.Line);
+						}
+					}
 				}
 
 				// Game has ended
@@ -282,8 +289,11 @@ namespace Craftalyst
 			});
 
 			Console.WriteLine("Starting monitor threads...");
+			stdErrThread.Name = "Minecraft-StdErr";
 			stdErrThread.Start();
+			stdOutThread.Name = "Minecraft-StdOut";
 			stdOutThread.Start();
+			monitorThread.Name = "Minecraft-Monitor";
 			monitorThread.Start();
 
 			Console.WriteLine("Game has started, returning control to UI...");

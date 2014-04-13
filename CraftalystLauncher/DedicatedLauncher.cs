@@ -64,6 +64,9 @@ namespace CraftalystLauncher
 					}
 
 					break;
+				} else if (response == (int)Gtk.ResponseType.Cancel) {
+					Gtk.Application.Quit();
+					Environment.Exit(0);
 				}
 			}
 
@@ -79,17 +82,37 @@ namespace CraftalystLauncher
 			}
 		}
 
+		private EventWaitHandle uxJobWait = null;
+
 		public void EnqueueUxJob (System.Action a)
 		{
+
+			if (uxJobWait == null)
+				uxJobWait = new EventWaitHandle(false, EventResetMode.AutoReset);
+
 			lock (this.jobQueue)
 				this.jobQueue.Enqueue(a);
+
+			while (true) {
+				int count = 0;
+
+				lock (jobQueue)
+					count = jobQueue.Count;
+
+				if (count > 100)
+					Thread.Sleep(25);
+				else
+					break;
+			}
+
+			//uxJobWait.Set();
 		}
 
 		private Queue<System.Action> jobQueue = new Queue<System.Action>();
 
 		public void Run ()
 		{
-			Thread.CurrentThread.Name = "MAIN";
+			Thread.CurrentThread.Name = "UX";
 
 			Login ();
 			
@@ -112,25 +135,30 @@ namespace CraftalystLauncher
 
 			Function delly;
 
+			Console.WriteLine("Registering GTK event sweeper");
+
 			delly = delegate () {
 				try {
-					Gdk.Threads.Enter();
+					//Gdk.Threads.Enter();
 					lock (jobQueue) {
 						System.Action job = null;
-						while (jobQueue.Count > 0 && (job = jobQueue.Dequeue()) != null)
+						int i = 0, max = 100;
+						while (i < max && jobQueue.Count > 0 && (job = jobQueue.Dequeue()) != null) {
 							job();
+							++i;
+						}
 					}
-					Gdk.Threads.Leave();
+					//Gdk.Threads.Leave();
 
 				} catch (Exception exc) {
 					Console.WriteLine (exc);
 				}
 
-				Gtk.Timeout.Add (100, delly);
+				Gtk.Timeout.Add (10, delly);
 				return false;
 			};
 
-			Gtk.Timeout.Add (100, delly);
+			Gtk.Timeout.Add (10, delly);
 
 			Application.Run ();
 		}

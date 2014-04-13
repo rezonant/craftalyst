@@ -61,6 +61,9 @@
     <EmbeddedResource Include="gtk-gui\gui.stetic">
       <LogicalName>gui.stetic</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="icon.png">
+      <DeployService-UseProjectRelativePath>true</DeployService-UseProjectRelativePath>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="gtk-gui\generated.cs" />
@@ -73,14 +76,9 @@
     <Compile Include="gtk-gui\CraftalystLauncher.InstallationDialog.cs" />
     <Compile Include="DedicatedLauncher.cs" />
     <Compile Include="InstallationDialogStatusListener.cs" />
+    <Compile Include="MainWindowGameMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <ItemGroup>
-    <Content Include="tirrin_test_favicon1.png">
-      <DeployService-UseProjectRelativePath>true</DeployService-UseProjectRelativePath>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Code\Craftalyst\Craftalyst\Craftalyst.csproj">
       <Project>{24F1FF93-91D4-4C2B-BCA2-1446AB492995}</Project>

@@ -6,7 +6,7 @@
   </configuration>
   <import>
     <widget-library name="glade-sharp, Version=2.12.0.0, Culture=neutral, PublicKeyToken=35e10195dab3c99f" />
-    <widget-library name="../bin/Debug/CraftalystLauncher.exe" internal="true" />
+    <widget-library name="../bin/Release/CraftalystLauncher.exe" internal="true" />
   </import>
   <widget class="Gtk.Window" id="MainWindow" design-size="1139 566">
     <action-group name="Default" />
@@ -88,11 +88,7 @@
                         <property name="MemberName">minecraftLog</property>
                         <property name="CanFocus">True</property>
                         <property name="ShowScrollbars">True</property>
-                        <property name="Text" translatable="yes">Loading Minecraft...
-Doing important things...
-Preparing gajiggers...
-Opening whatchamacallits
-</property>
+                        <property name="Text" translatable="yes">Click Play below to start Minecraft!</property>
                       </widget>
                     </child>
                   </widget>
@@ -192,6 +188,7 @@ Opening whatchamacallits
                 <property name="Label" translatable="yes">Play</property>
                 <property name="UseUnderline">True</property>
                 <signal name="Activated" handler="OnPlayButtonActivated" />
+                <signal name="Clicked" handler="OnPlayButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">0</property>
@@ -207,6 +204,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Teamspeak</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnTsButtonActivated" />
+                <signal name="Clicked" handler="OnTsButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">1</property>
@@ -222,6 +221,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Map</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnMapButtonActivated" />
+                <signal name="Clicked" handler="OnMapButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">2</property>
@@ -237,6 +238,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Wiki</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnWikiButtonActivated" />
+                <signal name="Clicked" handler="OnWikiButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">3</property>
@@ -252,6 +255,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Forums</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnForumsButtonActivated" />
+                <signal name="Clicked" handler="OnForumsButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">4</property>
@@ -267,6 +272,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Website</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnWebsiteButtonActivated" />
+                <signal name="Clicked" handler="OnWebsiteButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">5</property>
@@ -282,6 +289,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Donate</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnDonateButtonActivated" />
+                <signal name="Clicked" handler="OnDonateButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">6</property>
@@ -297,6 +306,8 @@ Opening whatchamacallits
                 <property name="Type">TextOnly</property>
                 <property name="Label" translatable="yes">Report Server Down</property>
                 <property name="UseUnderline">True</property>
+                <signal name="Activated" handler="OnReportServerDownButtonActivated" />
+                <signal name="Clicked" handler="OnReportServerDownButtonActivated" />
               </widget>
               <packing>
                 <property name="Position">7</property>
@@ -319,7 +330,7 @@ Opening whatchamacallits
       </widget>
     </child>
   </widget>
-  <widget class="Gtk.Dialog" id="CraftalystLauncher.LoginDialog" design-size="551 198">
+  <widget class="Gtk.Dialog" id="CraftalystLauncher.LoginDialog" design-size="551 209">
     <property name="MemberName" />
     <property name="WindowPosition">CenterOnParent</property>
     <property name="Buttons">2</property>
@@ -342,9 +353,9 @@ Opening whatchamacallits
                     <property name="MemberName" />
                     <property name="Spacing">6</property>
                     <child>
-                      <widget class="Gtk.Image" id="image2">
+                      <widget class="Gtk.Image" id="image1">
                         <property name="MemberName" />
-                        <property name="Pixbuf">file:./tirrin_test_favicon1.png</property>
+                        <property name="Pixbuf">resource:CraftalystLauncher.icon.png</property>
                       </widget>
                       <packing>
                         <property name="Position">0</property>
@@ -464,6 +475,7 @@ Opening whatchamacallits
                         <property name="IsEditable">True</property>
                         <property name="Visibility">False</property>
                         <property name="InvisibleChar">●</property>
+                        <signal name="Activated" handler="OnPasswordActivated" />
                       </widget>
                       <packing>
                         <property name="TopAttach">1</property>
@@ -486,6 +498,7 @@ Opening whatchamacallits
                         <property name="CanFocus">True</property>
                         <property name="IsEditable">True</property>
                         <property name="InvisibleChar">●</property>
+                        <signal name="Activated" handler="OnUsernameActivated" />
                       </widget>
                       <packing>
                         <property name="LeftAttach">1</property>
@@ -543,6 +556,7 @@ Opening whatchamacallits
             <property name="StockId">gtk-cancel</property>
             <property name="ResponseId">-6</property>
             <signal name="Clicked" handler="OnButtonCancelClicked" />
+            <signal name="Activated" handler="OnButtonCancelClicked" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>
@@ -560,6 +574,7 @@ Opening whatchamacallits
             <property name="StockId">gtk-ok</property>
             <property name="ResponseId">-5</property>
             <signal name="Activated" handler="OnButtonOkActivated" />
+            <signal name="Clicked" handler="OnButtonOkActivated" />
             <property name="label">gtk-ok</property>
           </widget>
           <packing>
@@ -663,6 +678,8 @@ Opening whatchamacallits
             <property name="Type">StockItem</property>
             <property name="StockId">gtk-cancel</property>
             <property name="ResponseId">-6</property>
+            <signal name="Activated" handler="OnButtonCancelActivated" />
+            <signal name="Clicked" handler="OnButtonCancelActivated" />
             <property name="label">gtk-cancel</property>
           </widget>
           <packing>

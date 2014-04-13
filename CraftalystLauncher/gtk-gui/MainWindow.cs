@@ -100,7 +100,7 @@ public partial class MainWindow
 		this.GtkScrolledWindow.ShadowType = ((global::Gtk.ShadowType)(1));
 		// Container child GtkScrolledWindow.Gtk.Container+ContainerChild
 		this.minecraftLog = new global::Gtk.TextView ();
-		this.minecraftLog.Buffer.Text = "Loading Minecraft...\nDoing important things...\nPreparing gajiggers...\nOpening whatchamacallits\n";
+		this.minecraftLog.Buffer.Text = "Click Play below to start Minecraft!";
 		this.minecraftLog.CanFocus = true;
 		this.minecraftLog.Name = "minecraftLog";
 		this.GtkScrolledWindow.Add (this.minecraftLog);
@@ -270,5 +270,20 @@ public partial class MainWindow
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.playButton.Activated += new global::System.EventHandler (this.OnPlayButtonActivated);
+		this.playButton.Clicked += new global::System.EventHandler (this.OnPlayButtonActivated);
+		this.tsButton.Activated += new global::System.EventHandler (this.OnTsButtonActivated);
+		this.tsButton.Clicked += new global::System.EventHandler (this.OnTsButtonActivated);
+		this.mapButton.Activated += new global::System.EventHandler (this.OnMapButtonActivated);
+		this.mapButton.Clicked += new global::System.EventHandler (this.OnMapButtonActivated);
+		this.wikiButton.Activated += new global::System.EventHandler (this.OnWikiButtonActivated);
+		this.wikiButton.Clicked += new global::System.EventHandler (this.OnWikiButtonActivated);
+		this.forumsButton.Activated += new global::System.EventHandler (this.OnForumsButtonActivated);
+		this.forumsButton.Clicked += new global::System.EventHandler (this.OnForumsButtonActivated);
+		this.websiteButton.Activated += new global::System.EventHandler (this.OnWebsiteButtonActivated);
+		this.websiteButton.Clicked += new global::System.EventHandler (this.OnWebsiteButtonActivated);
+		this.donateButton.Activated += new global::System.EventHandler (this.OnDonateButtonActivated);
+		this.donateButton.Clicked += new global::System.EventHandler (this.OnDonateButtonActivated);
+		this.reportServerDownButton.Activated += new global::System.EventHandler (this.OnReportServerDownButtonActivated);
+		this.reportServerDownButton.Clicked += new global::System.EventHandler (this.OnReportServerDownButtonActivated);
 	}
 }

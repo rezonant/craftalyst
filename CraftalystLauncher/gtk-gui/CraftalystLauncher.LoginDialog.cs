@@ -7,7 +7,7 @@ namespace CraftalystLauncher
 		private global::Gtk.VBox vbox6;
 		private global::Gtk.VBox vbox5;
 		private global::Gtk.HBox hbox5;
-		private global::Gtk.Image image2;
+		private global::Gtk.Image image1;
 		private global::Gtk.Label serverName;
 		private global::Gtk.Label label7;
 		private global::Gtk.Table table1;
@@ -43,11 +43,11 @@ namespace CraftalystLauncher
 			this.hbox5.Name = "hbox5";
 			this.hbox5.Spacing = 6;
 			// Container child hbox5.Gtk.Box+BoxChild
-			this.image2 = new global::Gtk.Image ();
-			this.image2.Name = "image2";
-			this.image2.Pixbuf = new global::Gdk.Pixbuf (global::System.IO.Path.Combine (global::System.AppDomain.CurrentDomain.BaseDirectory, "./tirrin_test_favicon1.png"));
-			this.hbox5.Add (this.image2);
-			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.image2]));
+			this.image1 = new global::Gtk.Image ();
+			this.image1.Name = "image1";
+			this.image1.Pixbuf = global::Gdk.Pixbuf.LoadFromResource ("CraftalystLauncher.icon.png");
+			this.hbox5.Add (this.image1);
+			global::Gtk.Box.BoxChild w2 = ((global::Gtk.Box.BoxChild)(this.hbox5 [this.image1]));
 			w2.Position = 0;
 			w2.Expand = false;
 			w2.Fill = false;
@@ -189,10 +189,14 @@ namespace CraftalystLauncher
 				this.Child.ShowAll ();
 			}
 			this.DefaultWidth = 551;
-			this.DefaultHeight = 198;
+			this.DefaultHeight = 209;
 			this.Show ();
+			this.username.Activated += new global::System.EventHandler (this.OnUsernameActivated);
+			this.password.Activated += new global::System.EventHandler (this.OnPasswordActivated);
 			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelClicked);
+			this.buttonCancel.Activated += new global::System.EventHandler (this.OnButtonCancelClicked);
 			this.buttonOk.Activated += new global::System.EventHandler (this.OnButtonOkActivated);
+			this.buttonOk.Clicked += new global::System.EventHandler (this.OnButtonOkActivated);
 		}
 	}
 }

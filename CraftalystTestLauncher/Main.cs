@@ -55,7 +55,9 @@ namespace CraftalystTestLauncher {
 				} catch (Exception e) {
 					Console.WriteLine();
 					Console.WriteLine("Invalid Login: "+e.Message);
-					Thread.Sleep(6000);
+					Console.WriteLine(e);
+
+					Thread.Sleep(100000);
 
 					loggedIn = false;
 				}

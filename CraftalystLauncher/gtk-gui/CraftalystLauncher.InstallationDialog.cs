@@ -93,6 +93,8 @@ namespace CraftalystLauncher
 			this.DefaultWidth = 810;
 			this.DefaultHeight = 437;
 			this.Show ();
+			this.buttonCancel.Activated += new global::System.EventHandler (this.OnButtonCancelActivated);
+			this.buttonCancel.Clicked += new global::System.EventHandler (this.OnButtonCancelActivated);
 		}
 	}
 }

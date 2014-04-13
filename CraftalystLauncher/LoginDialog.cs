@@ -32,6 +32,16 @@ namespace CraftalystLauncher
 			this.Respond(Gtk.ResponseType.Ok);
 		}
 
+		protected void OnUsernameActivated (object sender, EventArgs e)
+		{
+			OnButtonOkActivated(sender, e);
+		}
+
+		protected void OnPasswordActivated (object sender, EventArgs e)
+		{
+			OnButtonOkActivated(sender, e);
+		}
+
 
 	}
 }

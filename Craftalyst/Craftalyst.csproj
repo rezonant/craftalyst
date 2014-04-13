@@ -37,7 +37,7 @@
     <Reference Include="System.Numerics" />
     <Reference Include="ICSharpCode.SharpZipLib" />
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\libraries\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\libraries\JsonNet\Bin\Net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

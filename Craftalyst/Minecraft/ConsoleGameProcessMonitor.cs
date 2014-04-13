@@ -17,9 +17,9 @@ namespace Craftalyst
 	class ConsoleGameProcessMonitor : IGameProcessMonitor
 	{
 		#region IGameProcessMonitor implementation
-		public void OutputLine (string line)
+		public void OutputLine (GameMessageType type, string line)
 		{
-			Console.WriteLine(line);
+			Console.WriteLine("[{0}] {1}", type, line);
 		}
 
 		public void GameEnded (int exitCode)
