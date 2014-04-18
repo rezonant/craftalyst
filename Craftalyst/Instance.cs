@@ -47,6 +47,18 @@ namespace Craftalyst
 		public string ModsStoreFolder { get; set; }
 		public bool IsNewInstance { get; set; }
 
+		public string Host {
+			get {
+				try {
+					var uri = new Uri(Description.SyncUrl);
+
+					return uri.Host;
+				} catch (Exception) { }
+
+				return null;
+			}
+		}
+
 		public InstanceDescription Description { get; set; }
 
 		private Minecraft GameObject { get; set; }
@@ -229,6 +241,11 @@ namespace Craftalyst
 			listener.SetProgress(1);
 		}
 
+		public void Delete ()
+		{
+			Directory.Delete(GameFolder, true);
+		}
+
 		public void InstallIfNecessary()
 		{
 			if (IsNewInstance)
@@ -279,7 +296,7 @@ namespace Craftalyst
 
 			// Install configuration files...
 			UpdateConfigFiles(listener);
-			
+
 			listener.Log("Performing synchronization with server...");
 			// Update to latest from server
 			Sync (listener);

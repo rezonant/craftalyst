@@ -1001,6 +1001,8 @@ WARNING: Connecting to a Craftalyst server will authorize that server to install
                     <property name="Icon">stock:gtk-delete Menu</property>
                     <property name="Label" translatable="yes">Delete</property>
                     <property name="UseUnderline">True</property>
+                    <signal name="Activated" handler="OnDeleteBtnActivated" />
+                    <signal name="Clicked" handler="OnDeleteBtnClicked" />
                   </widget>
                   <packing>
                     <property name="Position">2</property>
