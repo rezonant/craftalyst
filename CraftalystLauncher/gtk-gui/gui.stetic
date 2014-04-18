@@ -960,9 +960,55 @@ WARNING: Connecting to a Craftalyst server will authorize that server to install
               </packing>
             </child>
             <child>
-              <widget class="Gtk.Label" id="label3">
+              <widget class="Gtk.HBox" id="hbox1">
                 <property name="MemberName" />
-                <property name="LabelProp" translatable="yes">Select the instance you wish to launch:</property>
+                <property name="Spacing">6</property>
+                <child>
+                  <widget class="Gtk.Label" id="label3">
+                    <property name="MemberName" />
+                    <property name="Xalign">0</property>
+                    <property name="LabelProp" translatable="yes">Select the instance you wish to launch:</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">0</property>
+                    <property name="AutoSize">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="connectBtn">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-connect Menu</property>
+                    <property name="Label" translatable="yes">Connect</property>
+                    <property name="UseUnderline">True</property>
+                    <signal name="Entered" handler="OnConnectBtnEntered" />
+                    <signal name="Activated" handler="OnConnectBtnActivated" />
+                    <signal name="Clicked" handler="OnConnectBtnClicked" />
+                  </widget>
+                  <packing>
+                    <property name="Position">1</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="Gtk.Button" id="deleteBtn">
+                    <property name="MemberName" />
+                    <property name="CanFocus">True</property>
+                    <property name="Type">TextAndIcon</property>
+                    <property name="Icon">stock:gtk-delete Menu</property>
+                    <property name="Label" translatable="yes">Delete</property>
+                    <property name="UseUnderline">True</property>
+                  </widget>
+                  <packing>
+                    <property name="Position">2</property>
+                    <property name="AutoSize">True</property>
+                    <property name="Expand">False</property>
+                    <property name="Fill">False</property>
+                  </packing>
+                </child>
               </widget>
               <packing>
                 <property name="Position">1</property>
@@ -1008,11 +1054,11 @@ WARNING: Connecting to a Craftalyst server will authorize that server to install
             <property name="MemberName" />
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-cancel</property>
+            <property name="Type">TextAndIcon</property>
+            <property name="Icon">stock:gtk-cancel Menu</property>
+            <property name="Label" translatable="yes">_Cancel</property>
+            <property name="UseUnderline">True</property>
             <property name="ResponseId">-6</property>
-            <property name="label">gtk-cancel</property>
           </widget>
           <packing>
             <property name="Expand">False</property>
@@ -1024,11 +1070,11 @@ WARNING: Connecting to a Craftalyst server will authorize that server to install
             <property name="MemberName" />
             <property name="CanDefault">True</property>
             <property name="CanFocus">True</property>
-            <property name="UseStock">True</property>
-            <property name="Type">StockItem</property>
-            <property name="StockId">gtk-ok</property>
+            <property name="Type">TextAndIcon</property>
+            <property name="Icon">stock:gtk-ok Menu</property>
+            <property name="Label" translatable="yes">_OK</property>
+            <property name="UseUnderline">True</property>
             <property name="ResponseId">-5</property>
-            <property name="label">gtk-ok</property>
           </widget>
           <packing>
             <property name="Position">1</property>

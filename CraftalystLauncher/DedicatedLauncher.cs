@@ -180,7 +180,12 @@ namespace CraftalystLauncher
 
 			Console.WriteLine("Registering GTK event sweeper");
 
-			delly = delegate () {
+			RunUx();
+		}
+
+		public void RunUx()
+		{
+			Gtk.Timeout.Add (10, delegate () {
 				try {
 					//Gdk.Threads.Enter();
 					lock (jobQueue) {
@@ -195,17 +200,15 @@ namespace CraftalystLauncher
 
 				} catch (Exception exc) {
 					Console.WriteLine (exc);
+					return false;
 				}
 
-				Gtk.Timeout.Add (10, delly);
-				return false;
-			};
+				return true;
+			});
 
-			Gtk.Timeout.Add (10, delly);
-
-			Application.Run ();
+			Gtk.Application.Run ();
 		}
-		
+
 		public void Run()
 		{
 			Thread.CurrentThread.Name = "UX";

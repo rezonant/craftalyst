@@ -469,6 +469,7 @@ namespace Craftalyst
 				        count, totalCount, 
 						Math.Round(progress / 1024.0 / 1024.0 * 100.0) / 100.0, 
 						Math.Round (total / 1024.0 / 1024.0 * 100.0) / 100.0));
+				Thread.Sleep(5);
 			}
 
 			listener.Log("Successfully installed all assets!");
