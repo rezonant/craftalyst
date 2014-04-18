@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using System.Linq;
 
 namespace Craftalyst
 {
@@ -14,6 +15,11 @@ namespace Craftalyst
 
 		public string AutoLoginUser { get; set; }
 		public List<SavedCredential> Credentials { get; set; }
+
+		public SavedCredential GetCredentialsFor(string user)
+		{
+			return Credentials.Where(x => x.UserName == user).SingleOrDefault();
+		}
 
 		public static SavedCredentials Parse(string json)
 		{

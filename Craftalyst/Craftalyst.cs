@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Craftalyst {
 	public class Context {
@@ -143,8 +144,33 @@ namespace Craftalyst {
 
 			var config = InstanceDescription.FromFile(descFile);
 			var instance = new Instance(this, Path.Combine(InstancesFolder, name), config);
+			instance.Name = name;
 
 			return instance;
+		}
+
+		public IList<Instance> GetInstances ()
+		{
+			List<Instance> instances = new List<Instance>();
+
+			foreach (var dir in Directory.GetDirectories(InstancesFolder)) {
+				if (!File.Exists(Path.Combine(dir, "craftalyst-instance.json")))
+				    continue;
+
+				Instance instance = null;
+
+				try {
+					instance = GetInstance(Path.GetFileName(dir));
+				} catch (Exception e) {
+					Logger.Error("Caught: "+e);
+
+					Logger.Error("Failed to iterate over instance in directory {0}", dir);
+				}
+
+				instances.Add(instance);
+			}
+
+			return instances;
 		}
 
 		public Instance CreateInstance(string name, InstanceDescription description)

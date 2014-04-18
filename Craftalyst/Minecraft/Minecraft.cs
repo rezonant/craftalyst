@@ -409,6 +409,34 @@ namespace Craftalyst
 			InstallAssets(new ConsoleStatusListener());
 		}
 
+		private MinecraftAssetManifest assetManifest = null;
+
+		public MinecraftAssetManifest AssetManifest {
+			get {
+				if (assetManifest != null)
+					return assetManifest;
+
+				string indexName = VersionParameters.Assets;
+
+				if (string.IsNullOrEmpty (indexName))
+					indexName = "legacy";
+				string indexesDir = Path.Combine(AssetsLocation, "indexes");
+
+				Directory.CreateDirectory(indexesDir);
+				string manifestFile = string.Format ("{0}/{1}.json", indexesDir, indexName);
+
+				if (!File.Exists (manifestFile)) {
+					Downloader.Single (string.Format ("{0}/{1}.json", Minecraft.MinecraftManifestUrl, indexName), 
+						manifestFile);
+				}
+
+				using (StreamReader sr = new StreamReader(manifestFile))
+					assetManifest = MinecraftAssetManifest.Parse (sr.ReadToEnd ());
+			
+				return assetManifest;
+			}
+		}
+
 		private void InstallAssets (IStatusListener listener)
 		{
 			listener.SetTitle("Installing Minecraft assets...");
@@ -416,30 +444,12 @@ namespace Craftalyst
 
 			listener.Log ("Installing assets...");
 
-			string indexName = VersionParameters.Assets;
+			var manifest = AssetManifest;
 
-			if (string.IsNullOrEmpty (indexName))
-				indexName = "legacy";
-			string indexesDir = Path.Combine(AssetsLocation, "indexes");
-
-			Directory.CreateDirectory(indexesDir);
-			string manifestFile = string.Format ("{0}/{1}.json", indexesDir, indexName);
-
-			if (!File.Exists (manifestFile)) {
-				listener.Log ("Retrieving asset manifest file {0}/{1}.json...", Minecraft.MinecraftManifestUrl, indexName);
-				Downloader.Single (string.Format ("{0}/{1}.json", Minecraft.MinecraftManifestUrl, indexName), 
-					manifestFile);
-			} else {
-				listener.Log ("Using cached manifest file assets.{0}.json...", indexName);
-			}
-
-			MinecraftAssetManifest manifest = null;
-			using (StreamReader sr = new StreamReader(manifestFile))
-				manifest = MinecraftAssetManifest.Parse (sr.ReadToEnd ());
-			
 			listener.Log ("Found {0} assets in manifest...", manifest.Objects.Count);
-
-			var toInstall = manifest.Objects.Where (x => !x.IsInstalled(AssetsLocation));
+			
+			//var toInstall = manifest.Objects.Where (x => !x.IsInstalled(AssetsLocation));
+			var toInstall = manifest.Objects;
 			listener.Log ("Need to get {0} assets from Minecraft.net...", toInstall.Count ());
 
 			int progress = 0;
@@ -648,10 +658,16 @@ namespace Craftalyst
             mcArgs = mcArgs.Replace("${auth_uuid}", authUUID);
             mcArgs = mcArgs.Replace("${auth_access_token}", authAccessToken);
 
+			string assetsDir = AssetsLocation;
+			var manifest = AssetManifest;
+
+			if (manifest.Virtual)
+				assetsDir = Path.Combine(assetsDir, "legacy", "virtual");
+
             mcArgs = mcArgs.Replace("${version_name}", SelectedVersion);
 			mcArgs = mcArgs.Replace("${game_directory}", string.Format ("\"{0}\"", GameLocation));
-			mcArgs = mcArgs.Replace("${game_assets}", string.Format ("\"{0}\"", AssetsLocation));
-			mcArgs = mcArgs.Replace("${assets_root}", string.Format ("\"{0}\"", AssetsLocation));
+			mcArgs = mcArgs.Replace("${game_assets}", string.Format ("\"{0}\"", assetsDir));
+			mcArgs = mcArgs.Replace("${assets_root}", string.Format ("\"{0}\"", assetsDir));
 			mcArgs = mcArgs.Replace("${assets_index_name}", string.Format ("\"{0}\"", VersionParameters.Assets));
 			mcArgs = mcArgs.Replace("${user_properties}", "{}");
 			mcArgs = mcArgs.Replace("${user_type}", accountType);

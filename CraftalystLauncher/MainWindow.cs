@@ -6,6 +6,7 @@ using System.Linq;
 using CraftalystLauncher;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
 
 public partial class MainWindow: Gtk.Window
 {	
@@ -15,8 +16,18 @@ public partial class MainWindow: Gtk.Window
 		Session = session;
 		Build ();
 
-		titleLabel.Text = instance.Name;
-		usernameLabel.Markup = string.Format ("Playing as <b>{0}</b>", session.Username);
+		titleLabel.Text = instance.Description.Name;
+
+		if (session != null)
+			usernameLabel.Markup = string.Format ("Logged in as <b>{0}</b>", Session.Username);
+		else {
+			var saved = GetSavedCredentials();
+			if (saved == null) {
+				usernameLabel.Markup = string.Format ("Click Play to Login");
+			} else {
+				usernameLabel.Markup = string.Format ("Welcome back <b>{0}</b>!", saved.AutoLoginUser);
+			}
+		}
 
 		var syncSummary = instance.CheckSync();
 
@@ -157,6 +168,7 @@ public partial class MainWindow: Gtk.Window
 	protected void OnDeleteEvent (object sender, DeleteEventArgs a)
 	{
 		a.RetVal = true;
+		Destroy();
 		Application.Quit ();
 	}
 
@@ -174,6 +186,105 @@ public partial class MainWindow: Gtk.Window
 	}
 
 	public void Play()
+	{
+		try {
+			if (Session == null)
+				Login();
+		} catch (CancelException) {
+			return;
+		}
+
+		Launch();
+	}
+
+	string SavedCredentialsFile
+	{
+		get {
+			return System.IO.Path.Combine (Instance.GameFolder, "credentials.json");
+		}
+	}
+
+	public SavedCredentials GetSavedCredentials ()
+	{
+		string credsFileName = SavedCredentialsFile;
+
+		if (!File.Exists (credsFileName))
+			return null;
+
+		using (var sr = new StreamReader (credsFileName))
+			return SavedCredentials.Parse (sr.ReadToEnd ());
+	}
+
+	public void Login()
+	{
+		LoginDialog login = new LoginDialog ();
+		var saved = GetSavedCredentials();
+
+		try {
+			if (saved != null) {
+				login.Username = saved.AutoLoginUser;
+
+				var savedCreds = saved.Credentials.Where(x => x.UserName == saved.AutoLoginUser).FirstOrDefault();
+				if (savedCreds != null) {
+					login.Password = savedCreds.Password;
+					login.RememberCredentials = true;
+				}
+			}
+
+			while (true) {
+				int response = login.Run ();
+
+				if (response == (int)Gtk.ResponseType.Ok) {
+
+					var auth = new MinecraftAuthentication ();
+					string message = "Invalid login!";
+
+					try {
+						Session = auth.Login (login.Username, login.Password);
+					} catch (Exception e) {
+						Session = null;
+						message = e.Message;
+					}
+
+					if (Session == null || Session.AccessToken == null) {
+						DedicatedLauncher.MessageBox (message);
+						continue;
+					}
+
+					break;
+				} else if (response == (int)Gtk.ResponseType.Cancel) {
+					throw new CancelException();
+				}
+			}
+
+			saved = new SavedCredentials() {
+				AutoLoginUser = login.Username,
+				Credentials = new List<SavedCredential>()
+			};
+
+			if (login.RememberCredentials) {
+				saved.Credentials = new List<SavedCredential>() {
+					new SavedCredential() {
+						UserName = login.Username,
+						Password = login.Password
+					}
+				};
+			}
+
+			Directory.CreateDirectory(System.IO.Path.GetDirectoryName(SavedCredentialsFile));
+			using (StreamWriter sw = new StreamWriter(SavedCredentialsFile))
+				sw.Write(saved.ToJson());
+
+			login.Hide ();
+			login.Destroy();
+			
+			usernameLabel.Markup = string.Format ("Playing as <b>{0}</b>", Session.Username);
+		} finally {
+			login.Destroy();
+		}
+	}
+
+	public void Launch()
 	{
 		playButton.Sensitive = false;
 		var monitor = new MainWindowGameMonitor(this);
@@ -221,6 +332,11 @@ public partial class MainWindow: Gtk.Window
 		thread = new Thread(delegate() {
 			var mc = Instance.CreateMinecraft();
 			GameProcess = mc.Start(Session, monitor);
+
+			DedicatedLauncher.Singleton.EnqueueUxJob(delegate() {
+				this.minecraftStatus.Text = string.Format("Minecraft is running (Process #{0})", GameProcess.Id);
+			});
+
 			Console.WriteLine("Game launched from seperate thread!");
 		});
 		thread.IsBackground = true;

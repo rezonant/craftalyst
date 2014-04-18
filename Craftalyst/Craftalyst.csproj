@@ -79,4 +79,7 @@
   <ItemGroup>
     <Folder Include="Minecraft\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Logo.png" />
+  </ItemGroup>
 </Project>

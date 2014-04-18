@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace Craftalyst
 {
-    class Downloader
+    public class Downloader
     {
 		public static string ActiveFile { get; private set; }
 		public static string ActiveURL { get; private set; }
@@ -19,6 +19,12 @@ namespace Craftalyst
 		public static void Single(string url, string file)
 		{
 			Single(url, file, new ConsoleStatusListener());
+		}
+
+		public static Stream Open(string url)
+		{
+			var webclient = new WebClient();
+			return webclient.OpenRead(new Uri(url));
 		}
 
 		/// <summary>

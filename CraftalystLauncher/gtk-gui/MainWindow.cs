@@ -146,8 +146,9 @@ public partial class MainWindow
 		this.usernameLabel = new global::Gtk.Label ();
 		this.usernameLabel.Name = "usernameLabel";
 		this.usernameLabel.Xalign = 1F;
-		this.usernameLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Playing as <b>rezonaut</b>");
+		this.usernameLabel.LabelProp = global::Mono.Unix.Catalog.GetString ("Playing as <b>rezonaut</b>, because you know he's cool!");
 		this.usernameLabel.UseMarkup = true;
+		this.usernameLabel.Wrap = true;
 		this.vbox3.Add (this.usernameLabel);
 		global::Gtk.Box.BoxChild w11 = ((global::Gtk.Box.BoxChild)(this.vbox3 [this.usernameLabel]));
 		w11.Position = 0;
@@ -331,7 +332,7 @@ public partial class MainWindow
 			this.Child.ShowAll ();
 		}
 		this.DefaultWidth = 987;
-		this.DefaultHeight = 506;
+		this.DefaultHeight = 521;
 		this.Show ();
 		this.DeleteEvent += new global::Gtk.DeleteEventHandler (this.OnDeleteEvent);
 		this.Shown += new global::System.EventHandler (this.OnShown);

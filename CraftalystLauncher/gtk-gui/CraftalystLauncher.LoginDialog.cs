@@ -9,7 +9,7 @@ namespace CraftalystLauncher
 		private global::Gtk.HBox hbox5;
 		private global::Gtk.Image image1;
 		private global::Gtk.Label serverName;
-		private global::Gtk.Label label7;
+		private global::Gtk.Label loginMessage;
 		private global::Gtk.Table table1;
 		private global::Gtk.Label label4;
 		private global::Gtk.Label label5;
@@ -72,12 +72,12 @@ namespace CraftalystLauncher
 			w4.Expand = false;
 			w4.Fill = false;
 			// Container child vbox5.Gtk.Box+BoxChild
-			this.label7 = new global::Gtk.Label ();
-			this.label7.Name = "label7";
-			this.label7.Xalign = 0F;
-			this.label7.LabelProp = global::Mono.Unix.Catalog.GetString ("Login to Minecraft to launch the Tirrin Minecraft client.");
-			this.vbox5.Add (this.label7);
-			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox5 [this.label7]));
+			this.loginMessage = new global::Gtk.Label ();
+			this.loginMessage.Name = "loginMessage";
+			this.loginMessage.Xalign = 0F;
+			this.loginMessage.LabelProp = global::Mono.Unix.Catalog.GetString ("Login with your Mojang account to start Minecraft");
+			this.vbox5.Add (this.loginMessage);
+			global::Gtk.Box.BoxChild w5 = ((global::Gtk.Box.BoxChild)(this.vbox5 [this.loginMessage]));
 			w5.Position = 1;
 			w5.Expand = false;
 			w5.Fill = false;

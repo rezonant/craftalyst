@@ -59,6 +59,14 @@ namespace Craftalyst
 		public string Name { get; set; }
 
 		/// <summary>
+		/// Name to show the user when selecting this instance description.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		public string Id { get; set; }
+
+		/// <summary>
 		/// Gets or sets the message of the day.
 		/// </summary>
 		/// <value>

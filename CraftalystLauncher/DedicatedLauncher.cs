@@ -103,6 +103,7 @@ namespace CraftalystLauncher
 				};
 			}
 
+			Directory.CreateDirectory(Path.GetDirectoryName(credsFileName));
 			using (StreamWriter sw = new StreamWriter(credsFileName))
 				sw.Write(saved.ToJson());
 
@@ -146,12 +147,18 @@ namespace CraftalystLauncher
 
 		private Queue<System.Action> jobQueue = new Queue<System.Action>();
 
-		public void Run ()
+		private InstanceDescription DownloadDescription(string uri)
 		{
-			Thread.CurrentThread.Name = "UX";
+			using (StreamReader sr = new StreamReader(Downloader.Open(uri))) {
+				return InstanceDescription.Parse(sr.ReadToEnd());
+			}
+		}
 
-			Login ();
-			
+		public void RunInstance()
+		{	
+
+			//Login ();
+
 			var installDialog = new InstallationDialog ();
 			installDialog.Show ();
 			installDialog.ShowAll();
@@ -197,6 +204,97 @@ namespace CraftalystLauncher
 			Gtk.Timeout.Add (10, delly);
 
 			Application.Run ();
+		}
+		
+		public void Run()
+		{
+			Thread.CurrentThread.Name = "UX";
+
+			try {
+				while (true) {
+					RunNew();
+				}
+			} catch (CancelException) { }
+		}
+
+		public void RunNew ()
+		{
+			var instances = Craft.GetInstances();
+
+			if (instances.Count == 0) {
+				var dialog = new ChooseServerDialog();
+
+				InstanceDescription instanceDescription = null;
+
+				while (true) {
+					var dialogResult = dialog.Run();
+					if (dialogResult == (int)Gtk.ResponseType.Cancel)
+						throw new CancelException();
+
+					var serverHost = dialog.Server;
+					string urlHttp80 = string.Format("http://{0}/craftalyst/instance.json", serverHost);
+					string urlHttp8080 = string.Format("http://{0}:8080/craftalyst/instance.json", serverHost);
+
+					try {
+						instanceDescription = DownloadDescription(urlHttp80);
+					} catch (Exception) {
+						Logger.Debug("Failed to retrieve URL '{0}', this might not be an error.", urlHttp80);
+					}
+
+					if (instanceDescription == null) {
+						try {
+							instanceDescription = DownloadDescription(urlHttp8080);
+						} catch (Exception) {
+							Logger.Debug("Failed to retrieve URL '{0}'", urlHttp8080);
+						}
+					}
+
+					if (instanceDescription == null) {
+						MessageBox("Failed to connect to Craftalyst server {0}", serverHost);
+						continue;
+					}
+
+					string localId = string.Format("{0}_{1}", serverHost, instanceDescription.Id);
+					try {
+						Instance = Craft.CreateInstance(localId, instanceDescription);
+					} catch (Exception e) {
+						MessageBox("Failed to create local instance {0}: "+e.Message);
+						Logger.Debug(e);
+					}
+					
+					if (Instance == null) {
+						MessageBox("Failed to create Craftalyst instance!");
+
+						return;
+					}
+
+					break;
+				}
+
+				dialog.Destroy();
+			} else {
+				var dialog = new InstanceSelectionDialog(Craft);
+
+				while (true) {
+					var result = dialog.Run();
+					
+					if (result == (int)Gtk.ResponseType.Cancel)
+						throw new CancelException();
+
+					Instance = dialog.SelectedInstance;
+
+					if (Instance == null) {
+						MessageBox("Please select an instance to launch.");
+						continue;
+					}
+
+					break;
+				}
+
+				dialog.Destroy();
+			}
+
+			RunInstance();
 		}
 
 		public Thread ControlThread { get; set; }
