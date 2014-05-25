@@ -11,19 +11,20 @@ namespace CraftalystLauncher
 {
 	public class DedicatedLauncher
 	{
-		public DedicatedLauncher (string instanceName, InstanceDescription defaultInstanceDescription)
+		public DedicatedLauncher (string instanceName, InstanceDescription defaultInstanceDescription):
+			this()
 		{
-			Craft = new Context ();
-			Craft.AppName = "Craftalyst Launcher";
-			Craft.AppVersion = "0.1.0a9";
-			
 			var instance = Craft.GetInstance (instanceName);
 
 			if (instance == null)
 				instance = Craft.CreateInstance(instanceName, defaultInstanceDescription);
+		}
 
-			Instance = instance;
-
+		public DedicatedLauncher ()
+		{
+			Craft = new Context ();
+			Craft.AppName = "Craftalyst Launcher";
+			Craft.AppVersion = "0.6.0";
 			singleton = this;
 		}
 
@@ -322,15 +323,7 @@ namespace CraftalystLauncher
 		{
 			Application.Init ();
 
-			var crafter = new DedicatedLauncher("Tirrin", new InstanceDescription() {
-				Version = "1.6.4-forge",
-				Name = "Tirrin",
-				Description = "Client instance for Tirrin server",
-				SyncUrl = "http://play.tirrin.com:8080/craftalyst",
-				SyncConfigs = new List<string>(),
-				Mods = new List<ModDescription>(),
-				ConfigVersion = 0
-			});
+			var crafter = new DedicatedLauncher();
 			crafter.Run();
 		}
 	}

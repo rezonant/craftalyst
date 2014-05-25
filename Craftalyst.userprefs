@@ -10,26 +10,21 @@
       <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/LoginDialog.cs" Line="21" Column="27" />
       <File FileName="Craftalyst/SavedCredentials.cs" Line="17" Column="3" />
       <File FileName="CraftalystTestLauncher/Main.cs" Line="14" Column="52" />
-      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/DedicatedLauncher.cs" Line="274" Column="24" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/DedicatedLauncher.cs" Line="274" Column="12" />
       <File FileName="Craftalyst/Minecraft/Minecraft.cs" Line="414" Column="47" />
-      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/MainWindow.cs" Line="18" Column="42" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/MainWindow.cs" Line="18" Column="1" />
       <File FileName="Craftalyst/Minecraft/MinecraftAssetManifest.cs" Line="52" Column="80" />
       <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/ChooseServerDialog.cs" Line="9" Column="18" />
       <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/InstanceSelectionDialog.cs" Line="28" Column="4" />
       <File FileName="Craftalyst/Downloader.cs" Line="18" Column="3" />
       <File FileName="Craftalyst/Craftalyst.cs" Line="144" Column="4" />
-      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/TreeViewExtensions.cs" Line="8" Column="4" />
+      <File FileName="../../Creative/Code/Craftalyst/CraftalystLauncher/TreeViewExtensions.cs" Line="10" Column="64" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="Craftalyst" expanded="True">
-            <Node name="Minecraft" expanded="True" />
-          </Node>
-          <Node name="CraftalystLauncher" expanded="True">
-            <Node name="UserInterface" expanded="True">
-              <Node name="CraftalystLauncher.TreeViewExtensions" selected="True" />
-            </Node>
+          <Node name="CraftalystLauncher" expanded="True" selected="True">
+            <Node name="UserInterface" expanded="True" />
           </Node>
         </State>
       </Pad>
